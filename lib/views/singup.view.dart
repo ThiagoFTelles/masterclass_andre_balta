@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:masterclass_andre_balta/controllers/singnup.controller.dart';
+import 'package:masterclass_andre_balta/stores/app.store.dart';
 import 'package:masterclass_andre_balta/view_model/signup.viewmodel.dart';
+import 'package:masterclass_andre_balta/views/home.view.dart';
+import 'package:provider/provider.dart';
 
 class SingupView extends StatefulWidget {
   @override
@@ -15,6 +18,7 @@ class _SingupViewState extends State<SingupView> {
 
   @override
   Widget build(BuildContext context) {
+    var store = Provider.of<AppStore>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -104,11 +108,21 @@ class _SingupViewState extends State<SingupView> {
                             _formKey.currentState.save();
                           }
 
-                          setState(() {
-                            _controller.create(model).then((data) {
-                              //TODO:
-                              setState(() {});
-                            });
+                          setState(() {});
+                          _controller.create(model).then((data) {
+                            setState(() {});
+                            store.setUser(
+                              data.name,
+                              data.email,
+                              data.picture,
+                              data.token,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeView(),
+                              ),
+                            );
                           });
                         },
                       )
